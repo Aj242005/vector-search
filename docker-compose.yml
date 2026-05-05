@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: image-search-backend
+    ports:
+      - "1008:1008"
+    environment:
+      # MongoDB credentials
+      - MONGO_URI=${MONGO_URI:-mongodb://mongodb:27017}
+      - MONGO_DB_NAME=${MONGO_DB_NAME:-image_search_db}
+      
+      # Pinecone credentials
+      - PINECONE_API_KEY=${PINECONE_API_KEY:-pcsk_3FjqCu_4UJP6DFRBoeCrEwRoUtViK6kBV7BuecSpitfBwjhtsNcxBKEFqfRhS4unoA4yBy}
+      - PINECONE_INDEX_NAME=${PINECONE_INDEX_NAME:-image-embeddings}
+      
+      # Google Drive
+      - GOOGLE_DRIVE_LINK=${GOOGLE_DRIVE_LINK:-}
+    volumes:
+      - ./backend/downloaded_images:/app/downloaded_images
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: image-search-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:latest
+    container_name: image-search-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:
