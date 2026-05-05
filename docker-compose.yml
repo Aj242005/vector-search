@@ -14,7 +14,7 @@ services:
       - MONGO_DB_NAME=${MONGO_DB_NAME:-image_search_db}
       
       # Pinecone credentials
-      - PINECONE_API_KEY=${PINECONE_API_KEY:-pcsk_3FjqCu_4UJP6DFRBoeCrEwRoUtViK6kBV7BuecSpitfBwjhtsNcxBKEFqfRhS4unoA4yBy}
+      - PINECONE_API_KEY=${PINECONE_API_KEY}
       - PINECONE_INDEX_NAME=${PINECONE_INDEX_NAME:-image-embeddings}
       
       # Google Drive

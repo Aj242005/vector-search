@@ -31,8 +31,8 @@ function App() {
     formData.append('phone_number', phoneNumber)
 
     try {
-      // Pointing to the backend running on port 1008
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:1008'
+      // Pointing to the production backend
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://vector-search.duckdns.org'
       const response = await axios.post(`${backendUrl}/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -52,7 +52,7 @@ function App() {
     }
   }
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:1008'
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://vector-search.duckdns.org'
 
   const handleDownloadAll = async () => {
     if (!results || results.length === 0) return;
