@@ -21,8 +21,36 @@ services:
       - GOOGLE_DRIVE_LINK=${GOOGLE_DRIVE_LINK:-}
     volumes:
       - ./backend/downloaded_images:/app/downloaded_images
+      - ./backend/cookies.txt:/root/.cache/gdown/cookies.txt
     depends_on:
       - mongodb
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DUCKDNS_SUBDOMAIN=${DUCKDNS_SUBDOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  duckdns:
+    image: lscr.io/linuxserver/duckdns:latest
+    container_name: duckdns-updater
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC
+      - SUBDOMAINS=${DUCKDNS_SUBDOMAIN}
+      - TOKEN=${DUCKDNS_TOKEN}
     restart: unless-stopped
 
   frontend:
@@ -47,3 +75,5 @@ services:
 
 volumes:
   mongodb_data:
+  caddy_data:
+  caddy_config:
