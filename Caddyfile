@@ -1,0 +1,3 @@
+{$DUCKDNS_SUBDOMAIN}.duckdns.org {
+    reverse_proxy backend:1008
+}

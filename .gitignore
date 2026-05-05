@@ -8,3 +8,7 @@ wheels/
 
 # Virtual environments
 .venv
+nature
+.env
+venv/
+downloaded_images/
